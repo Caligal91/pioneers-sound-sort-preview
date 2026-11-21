@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Blend it, Roo! · Short i · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#ffe7c2,#fff9ee);overflow:hidden;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#e0721a;text-shadow:0 3px 0 #fff}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:3vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:16px 34px;margin:9px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837;text-decoration:none}
+.back{position:absolute;left:18px;top:12px;font-size:clamp(16px,2.2vw,24px)}
+#prog{display:flex;gap:6px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:1vh 0 0;text-align:center;padding:0 14px;min-height:1.3em}
+#prompt b{letter-spacing:.04em;color:#1d4fd8}
+/* the creek */
+#creek{position:relative;width:min(96vw,1100px);height:clamp(200px,38vh,330px);margin-top:2vh;flex-shrink:0}
+#water{position:absolute;left:0;right:0;bottom:0;height:46%;border-radius:40px;background:linear-gradient(#7cc8f0,#3f9bd6);box-shadow:inset 0 8px 0 rgba(255,255,255,.35)}
+#water:before,#water:after{content:'';position:absolute;top:0;bottom:0;width:9%;background:#9bd06b;border-radius:40px 0 0 40px}
+#water:before{left:0}
+#water:after{right:0;border-radius:0 40px 40px 0}
+.stone{position:absolute;bottom:14%;display:flex;align-items:center;justify-content:center;font-weight:600;background:#c8c1b4;border-bottom:9px solid #8f877a;border-radius:46% 46% 40% 40%/50% 50% 40% 40%;transition:left .5s ease,background .3s,border-radius .3s,box-shadow .3s;cursor:pointer;line-height:1}
+.stone.lit{background:#ffe27a;border-bottom-color:#e0a100;box-shadow:0 0 26px #ffd84d}
+.stone.next{animation:nudge 1.6s infinite}
+@keyframes nudge{0%,70%,100%{translate:0 0}80%{translate:0 -8px}90%{translate:0 0}}
+.stone.joined{background:#fff;border:6px solid #1e2837;border-left-width:0;border-right-width:0;border-radius:0;box-shadow:0 8px 0 rgba(0,0,0,.12);bottom:22%}
+.stone.joined.first{border-left-width:6px;border-radius:26px 0 0 26px}
+.stone.joined.last{border-right-width:6px;border-radius:0 26px 26px 0}
+.stone.joined.first.last{border-radius:26px}
+.stone.joined.first{justify-content:flex-end;padding-right:3px}
+.stone.joined.last{justify-content:flex-start;padding-left:3px}
+.stone.pulse{animation:pulse .5s}
+@keyframes pulse{50%{transform:scale(1.18)}}
+.v{color:#e8231f}.k{color:#1d4fd8}
+#roo{position:absolute;bottom:0;left:0;pointer-events:none;transition:left .45s ease-in-out,bottom .45s ease-in-out}
+#roo img{width:100%;display:block;transform:scaleX(-1);filter:drop-shadow(0 6px 4px rgba(0,0,0,.18))}
+#roo.jump img{animation:jump .45s ease-in-out}
+@keyframes jump{50%{translate:0 -70px}}
+#act{min-height:clamp(130px,26vh,240px);display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:1vh}
+#pics{display:flex;gap:clamp(12px,3vw,40px);justify-content:center;flex-wrap:wrap}
+.pic{width:clamp(110px,19vw,210px);height:clamp(110px,19vw,210px);background:#fff;border:5px solid #1e2837;border-radius:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.12);transition:transform .12s;touch-action:manipulation}
+.pic img{width:72%;pointer-events:none}
+.pic:active{transform:scale(.95)}
+.pic.ok{background:#dff5e6;border-color:#2a9d5c;transform:scale(1.08)}
+.pic.no{animation:wig .45s;opacity:.35;pointer-events:none}
+@keyframes wig{0%,100%{translate:0}25%{translate:-12px}50%{translate:12px}75%{translate:-6px}}
+.fb{font-size:clamp(26px,4.5vw,48px);font-weight:600;height:1.4em;margin-top:1vh;color:#2a9d5c}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778}
+#startroo{width:clamp(80px,12vw,130px);transform:scaleX(-1);margin-top:-1vh}
+@media (max-width:520px){#prog{gap:3px}#prog i{width:11px;height:11px}#top{padding:8px 10px}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <a class="mini back" href="index.html">⟵ Games</a>
+  <h1>Blend it, Roo!</h1>
+  <img id="startroo" src="../img/kangaroo.png" alt="">
+  <div class="sub">Help Roo hop across the creek. Say each sound as Roo lands and keep it going. Then say the word!</div>
+  <button class="btn e" onclick="start('e')">Emerging<small>pig · pin · six</small></button>
+  <button class="btn c" onclick="start('c')">Consolidating<small>chick · ship · gift</small></button>
+  <button class="btn x" onclick="start('x')">Extending<small>hippo · ribbon · ticket</small></button>
+  <div class="foot">Pioneers Tutoring · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="prompt"></div>
+  <div id="creek"><div id="water"></div><div id="roo"><img src="../img/kangaroo.png" alt=""></div></div>
+  <div id="act">
+    <button class="btn b" id="hop">Hop!</button>
+    <button class="btn e" id="sayit" style="display:none">Say it!</button>
+    <div id="pics"></div>
+  </div>
+  <div class="fb" id="fb"></div>
+</div>
+
+<div class="screen" id="end">
+  <h1>Super blending!</h1>
+  <div class="big" id="endstars"></div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn b" onclick="start(mode)">Play again</button>
+  <button class="btn c" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// [sounds (one stone each, '.' separates them when a sound has 2+ letters), picture name, two look-alike pictures]
+// Short i. Short i is easy to mix up with short e in Australian speech (pin/pen), so the look-alike pictures include e words.
+// Not used on purpose: tin (picture is a tomato tin), lid, hit, tip (no picture that matches the word). i before l (pill, milk) drifts, so those come late.
+const SETS={
+ e:{main:[['p.i.g','pig','pin','pen'],['p.i.n','pin','pig','pan'],['b.i.n','bin','bed','bug'],['s.i.x','six','sun','seven'],
+          ['k.i.ss','kiss','kite','key'],['f.i.sh','fish','ship','fox'],['r.i.ng','ring','rat','rain']],
+    late:[['p.i.ll','pill','bell','pig'],['w.i.ng','wing','web','swan']],n:[6,2]},
+ c:{main:[['ch.i.ck','chick','duck','chef'],['sh.i.p','ship','shell','shoe'],['b.r.i.ck','brick','bridge','drum'],['g.i.f.t','gift','guitar','goat'],['p.i.n.k','pink','pig','pen']],
+    late:[['m.i.l.k','milk','mug','melon'],['s.w.i.m','swim','swan','sun']],n:[5,2]},
+ x:{main:[['h.i.pp.o','hippo','hen','horse'],['r.i.bb.o.n','ribbon','robot','rabbit'],['t.i.ck.e.t','ticket','tent','tiger'],['ch.i.ck.e.n','chicken','duck','cow'],
+          ['l.i.z.a.r.d','lizard','snake','frog'],['i.n.s.e.c.t','insect','ant','spider'],['w.i.n.d.ow','window','wing','web'],['m.i.rr.or','mirror','man','map'],
+          ['s.w.i.mm.i.ng','swimming','swan','ship']],late:[],n:[8,0]}
+};
+const IMG={swim:'swimming'};
+let mode='e',deck=[],idx=0,stars=0,first=0,tries=0,hops=0,G=[],stones=[],phase='',busy=false,J=false;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','You read it!':'p-read','Great reading!':'p-greatread','Listen again.':'p-again',
+ 'Say each sound and keep it going. Then say the word.':'p-blendsay','Now say the whole word!':'p-sayit','Which picture is it?':'p-whichpic',
+ 'Nearly! Blend it again, then have another go.':'p-blendagain','Great blending!':'p-blending','Super blending!':'p-endblend'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; return null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+
+const isV=g=>/^[aeiou]|^er$/.test(g);
+const CONT=/^(s|m|f|n|l|r|v|z|sh|th|ss|ll|nn|a|e|i|o|u|er)$/;
+// "sssaaat": stretch the sounds you can hold, keep the stop sounds short
+function stretch(gs){const n=mode==='x'?2:3;return gs.map(g=>CONT.test(g)?(g.length>1?g+g.slice(-1).repeat(n-1):g.repeat(n)):g).join('');}
+
+function start(m){mode=m;const S=SETS[m];deck=[...shuffle(S.main.map(x=>[...x])).slice(0,S.n[0]),...shuffle(S.late.map(x=>[...x])).slice(0,S.n[1])];
+  idx=0;stars=0;first=0;$('prog').innerHTML=deck.map(()=>'<i></i>').join('');$('stars').textContent='★ 0';show('game');next();}
+function quit(){if(curAudio)curAudio.pause();show('start');}
+
+function next(){if(idx>=deck.length)return finish();tries=0;hops=0;busy=false;phase='hop';J=false;
+  const [sounds]=deck[idx];G=sounds.split('.');
+  const C=$('creek');stones.forEach(s=>s.remove());
+  stones=G.map((g,i)=>{const s=document.createElement('div');s.className='stone';s.innerHTML=`<span class="${isV(g)?'v':'k'}">${g}</span>`;s.onpointerdown=e=>{e.preventDefault();tapStone(i);};C.appendChild(s);return s;});
+  $('prompt').innerHTML=`Say each sound and keep it going: <b>${stretch(G)}</b>`;
+  $('pics').innerHTML='';$('fb').textContent='';$('hop').style.display='';$('sayit').style.display='none';
+  layout(false);mark();
+  if(idx===0)setTimeout(()=>say('Say each sound and keep it going. Then say the word.'),300);}
+
+function dims(){const W=$('creek').clientWidth,H=$('creek').clientHeight,n=G.length;
+  const s=Math.floor(Math.min(H*0.4,130,W*0.88/(n*1.35)));return {W,H,n,s};}
+function spacedX(i){const {W,n,s}=dims();const x0=W*0.1+s*0.35, x1=W*0.92-s;const step=n>1?Math.min((x1-x0)/(n-1),s*2.1):0;
+  const span=step*(n-1)+s, off=(W-span)/2 - x0 + s*0.25;return x0+off+i*step;}
+function layout(anim){const {W,H,n,s}=dims();
+  // joined: each tile shrinks to its letters so the word reads as one word
+  const nch=G.join('').length, jf=Math.round(Math.min(96,H*0.3,W*0.78/(nch*0.62)));
+  stones.forEach((st,i)=>{st.style.fontSize=(J?jf:Math.round(s*(G[i].length>1?.5:.62)))+'px';});
+  const jw=J?stones.map((st,i)=>Math.round(st.firstChild.offsetWidth+jf*(i===0||i===n-1?.42:.12))):null, jt=J?jw.reduce((a,b)=>a+b,0):0;
+  stones.forEach((st,i)=>{st.style.width=(J?jw[i]:s)+'px';st.style.height=Math.round(J?jf*1.4:s*0.9)+'px';
+    let x;
+    if(J){x=(W-jt)/2+jw.slice(0,i).reduce((a,b)=>a+b,0);}
+    else if(i<hops){x=spacedX(hops-1)-(hops-1-i)*(s+4);}   // lit sounds slide along and stay joined to the newest one
+    else x=spacedX(i);
+    if(!anim)st.style.transition='none';st.style.left=Math.round(x)+'px';if(!anim){st.offsetWidth;st.style.transition='';}});
+  const r=$('roo'),rs=Math.round(Math.min(s*1.15,H*0.5));r.style.width=rs+'px';
+  let rx,rb=H*0.14+s*0.9-6;
+  if(J){rx=(W+jt)/2+8;rb=H*0.08;}
+  else if(hops===0){rx=spacedX(0)-rs*0.95;rb=H*0.3;}
+  else rx=spacedX(hops-1)+s/2-rs/2;
+  return {x:Math.round(Math.max(0,Math.min(W-rs,rx))),b:Math.round(rb)};}
+function placeRoo(p,anim){const r=$('roo');
+  if(anim){r.classList.remove('jump');r.offsetWidth;r.classList.add('jump');}else{r.style.transition='none';}
+  r.style.left=p.x+'px';r.style.bottom=p.b+'px';if(!anim){r.offsetWidth;r.style.transition='';}}
+function mark(){stones.forEach((s,i)=>s.classList.toggle('next',phase==='hop'&&i===hops));placeRoo(layout(false),false);}
+
+$('hop').onclick=()=>tapStone(hops);
+function tapStone(i){if(phase!=='hop'||busy)return;
+  if(i!==hops){const s=stones[hops];s.classList.remove('pulse');s.offsetWidth;s.classList.add('pulse');return;}
+  busy=true;hops++;const st=stones[i];st.classList.add('lit');st.classList.remove('next');tone(420+hops*70,.18);
+  placeRoo(layout(true),true);
+  setTimeout(()=>{busy=false;stones.forEach((s,k)=>s.classList.toggle('next',k===hops));if(hops>=G.length)setTimeout(join,450);},520);}
+function join(){phase='joined';J=true;stones.forEach((s,i)=>{s.classList.remove('lit','next');s.classList.add('joined');s.classList.toggle('first',i===0);s.classList.toggle('last',i===G.length-1);});
+  placeRoo(layout(true),true);tone(880,.2);
+  $('hop').style.display='none';$('sayit').style.display='';$('prompt').innerHTML='Now say the whole word!';say('Now say the whole word!');}
+$('sayit').onclick=()=>{if(phase!=='joined')return;phase='pick';$('sayit').style.display='none';$('prompt').innerHTML='Which picture is it?';say('Which picture is it?');
+  const [,ans,...d]=deck[idx];const P=$('pics');P.innerHTML='';
+  shuffle([ans,...d]).forEach(p=>{const b=document.createElement('div');b.className='pic';b.innerHTML=`<img src="../img/${IMG[p]||p}.png" alt="">`;b.onclick=()=>choose(b,p===ans);P.appendChild(b);});};
+function choose(b,ok){if(phase!=='pick')return;const w=deck[idx][1];
+  if(ok){phase='done';if(tries===0){stars++;first++;}$('stars').textContent='★ '+stars;b.classList.add('ok');yay();
+    const ph=['Great blending!','Yes!','You read it!','Super!'][Math.floor(Math.random()*4)];$('fb').textContent=ph;sayQ([w,ph]);
+    $('prog').children[idx].classList.add('d');idx++;document.querySelectorAll('.pic').forEach(p=>p.onclick=null);setTimeout(next,2000);}
+  else{tries++;oops();b.classList.add('no');$('fb').textContent='';
+    // never "wrong": blend the sounds again (stones pulse one by one), then a second slip gets the word modelled
+    stones.forEach((s,i)=>setTimeout(()=>{s.classList.remove('pulse');s.offsetWidth;s.classList.add('pulse');},i*380));
+    if(tries===1){$('prompt').innerHTML=`Blend it again: <b>${stretch(G)}</b>`;say('Nearly! Blend it again, then have another go.');}
+    else{$('prompt').innerHTML='Listen again.';sayQ(['Listen again.',w]);}}}
+window.addEventListener('resize',()=>{if($('game').classList.contains('on'))placeRoo(layout(false),false);});
+function finish(){const n=deck.length;$('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));$('endtxt').textContent=`Roo crossed the creek ${n} times.`+(first?` ${first} right first time!`:'');show('end');yay();say('Super blending!');
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+</script>
+</body>
+</html>

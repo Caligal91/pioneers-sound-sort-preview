@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Cup or Cap? · Short u · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#ffe0e6,#fff9ee);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#d6456a;text-shadow:0 3px 0 #fff;text-align:center}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:3vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:16px 34px;margin:9px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837}
+#prog{display:flex;gap:6px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+#q{margin-top:clamp(8px,4vh,40px);display:flex;align-items:center;justify-content:center;gap:2vw}
+#q .kl{width:clamp(70px,10vw,120px)}
+#spk{width:clamp(120px,17vw,190px);height:clamp(120px,17vw,190px);border-radius:50%;border:6px solid #1e2837;background:#ffd84d;font-size:clamp(54px,8vw,90px);cursor:pointer;box-shadow:0 8px 0 rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
+#spk:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.15)}
+#spk.talk{animation:talk .5s ease-in-out 2}
+@keyframes talk{50%{transform:scale(1.08)}}
+#pic{width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:#fff;border:6px solid #1e2837;border-radius:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.12)}
+#pic img{width:76%}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:3vh 0 1.6vh;text-align:center;padding:0 12px}
+#opts{display:flex;gap:clamp(16px,4vw,60px);justify-content:center;flex-wrap:wrap;padding:0 10px}
+.opt{width:clamp(150px,28vw,300px);min-height:clamp(110px,20vh,190px);background:#fff;border:6px solid #1e2837;border-radius:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.12);transition:transform .12s;padding:8px}
+.opt:active{transform:scale(.95)}
+.opt .w{font-size:clamp(52px,9vw,110px);font-weight:600;line-height:1.1;pointer-events:none}
+.opt .w span{color:#1e3a8a}.opt .w span.v{color:#e8231f}
+.opt img{width:clamp(60px,9vw,100px);pointer-events:none}
+.opt.ok{background:#dff5e6;border-color:#2a9d5c;transform:scale(1.08)}
+.opt.no{animation:wig .45s;opacity:.35;pointer-events:none}
+@keyframes wig{0%,100%{translate:0}25%{translate:-12px}50%{translate:12px}75%{translate:-6px}}
+.fb{font-size:clamp(24px,4vw,44px);font-weight:600;height:1.4em;margin-top:2vh;color:#2a9d5c;text-align:center}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778;text-align:center;padding:0 8px}
+.red{color:#e8231f}
+#start .pair{display:flex;gap:20px;align-items:center;font-size:clamp(28px,4vw,44px);font-weight:600;margin-bottom:1vh}
+#start .pair img{width:clamp(60px,8vw,90px)}
+@media (max-width:520px){#prog{gap:3px}#prog i{width:11px;height:11px}#top{padding:8px 10px}}
+@media (max-height:640px){h1{margin-top:2vh}.btn{padding:10px 28px;margin:6px}#q{margin-top:4px}#prompt{margin:1.4vh 0 1vh}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <h1>Cup or Cap?</h1>
+  <div class="pair"><img src="../img/cup.png" alt=""><span>c<span class="red">u</span>p · c<span class="red">a</span>p</span><img src="../img/cap.png" alt=""></div>
+  <div class="sub">Short <b class="red">u</b> or short <b class="red">a</b> or <b class="red">o</b>? Listen carefully – they sound very close!</div>
+  <button class="btn e" onclick="start('listen')">Listen<small>hear the word · tap the word</small></button>
+  <button class="btn c" onclick="start('read')">Read<small>see the picture · read both words · tap the right one</small></button>
+  <a href="index.html" class="btn b" style="text-decoration:none;text-align:center">⟵ Games</a>
+  <div class="foot">Pioneers Tutoring · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="q"></div>
+  <div id="prompt"></div>
+  <div id="opts"></div>
+  <div class="fb" id="fb"></div>
+</div>
+
+<div class="screen" id="end">
+  <h1>Super listening!</h1>
+  <div class="big" id="endstars"></div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn b" onclick="start(mode)">Play again</button>
+  <button class="btn c" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// Short u against short a / short o minimal pairs (cup/cap, bug/bag, duck/dock ...).
+// Short u is the vowel Australian children mix up with short a and short o (luck/lock, mud/mad), so it is trained against both.
+// The first word of each pair is the short u word. Every word in Listen has a Sophia clip that passed the speech-to-text check.
+const PAIRS=[['cup','cap'],['bug','bag'],['hut','hat'],['fun','fan'],['mud','mad'],['cut','cat'],['nut','not'],['luck','lock'],['rug','rag'],['truck','track']];
+const PICS=['cup','cap','bug','bag','hut','hat','cat','bus','truck','duck'];          // Read: picture -> pick the word
+const PARTNER={cup:'cap',cap:'cup',bug:'bag',bag:'bug',hut:'hat',hat:'hut',cat:'cut',bus:'boss',truck:'track',duck:'dock'};
+const IMG={};                                                                          // picture file when it differs from the word
+const BOTHPIC=new Set(['cup','cap','bug','bag','hut','hat']);                           // Listen: show pictures only when both words have one
+const N=10;
+let mode='listen',deck=[],idx=0,stars=0,first=0,tries=0,timers=[];
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const SENTS=[];
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','You read it!':'p-read','Great reading!':'p-greatread','Listen again.':'p-again','Super reading!':'p-reading','short a.':'p-shorta','short o.':'p-o','short u.':'p-u',
+ 'Which word did I say?':'p-pp-which','Listen carefully.':'p-pp-listen','Read both words. Which one is it?':'p-pp-read'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; const i=SENTS.indexOf(t); return i>=0?'s-'+i:null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+const later=(f,ms)=>timers.push(setTimeout(f,ms));
+const letters=w=>[...w].map(ch=>`<span class="${/[aeiou]/.test(ch)?'v':''}">${ch}</span>`).join('');
+
+function start(m){mode=m;timers.forEach(clearTimeout);timers=[];
+  if(m==='listen'){ // every pair once, then extras; the word said is the short u word or its a/o partner at random (about half each)
+    const ps=shuffle(PAIRS.map(p=>[...p]));deck=[];while(deck.length<N)ps.forEach(p=>{if(deck.length<N)deck.push([p[Math.random()<.5?0:1],p]);});
+    // keep short u and a/o targets balanced
+    let na=deck.filter(d=>d[0]===d[1][0]).length;for(const d of deck){if(na>N/2+1&&d[0]===d[1][0]){d[0]=d[1][1];na--;}else if(na<N/2-1&&d[0]===d[1][1]){d[0]=d[1][0];na++;}}
+    deck=shuffle(deck);}
+  else deck=shuffle([...PICS]).slice(0,N).map(w=>[w,shuffle([w,PARTNER[w]])]);
+  idx=0;stars=0;first=0;$('prog').innerHTML=deck.map(()=>'<i></i>').join('');$('stars').textContent='★ 0';show('game');next(true);}
+function quit(){timers.forEach(clearTimeout);timers=[];if(curAudio)curAudio.pause();show('start');}
+function next(firstOne){if(idx>=deck.length)return finish();tries=0;const [w,pair]=deck[idx];$('fb').textContent='';
+  const Q=$('q'),O=$('opts');O.innerHTML='';
+  if(mode==='listen'){Q.innerHTML='<img class="kl" src="../img/koala.png" alt=""><button id="spk" title="Hear it again">🔊</button>';$('spk').onclick=()=>hear();
+    $('prompt').textContent='Which word did you hear? Tap 🔊 to hear it again.';
+    const opts=shuffle([...pair]);const pics=opts.every(o=>BOTHPIC.has(o));
+    opts.forEach(o=>O.appendChild(card(o,pics)));
+    later(()=>firstOne?sayQ(['Which word did I say?',w]):hear(),350);}
+  else{Q.innerHTML=`<div id="pic"><img src="../img/${IMG[w]||w}.png" alt=""></div>`;
+    $('prompt').textContent='Read both words. Which one is the picture?';
+    pair.forEach(o=>O.appendChild(card(o,false)));
+    if(firstOne)later(()=>say('Read both words. Which one is it?'),350);}}
+function card(o,withPic){const b=document.createElement('div');b.className='opt';b.innerHTML=`<div class="w">${letters(o)}</div>`+(withPic?`<img src="../img/${IMG[o]||o}.png" alt="">`:'');b.onclick=()=>choose(b,o);return b;}
+function hear(){const s=$('spk');if(s){s.classList.remove('talk');void s.offsetWidth;s.classList.add('talk');}say(deck[idx][0]);}
+function choose(b,o){const [w]=deck[idx];
+  if(o===w){if(tries===0){stars++;first++;}$('stars').textContent='★ '+stars;b.classList.add('ok');yay();
+    const ph=mode==='listen'?['Great listening!','Yes!','You got it!','Super!'][Math.floor(Math.random()*4)]:['You read it!','Yes!','Great reading!','Super!'][Math.floor(Math.random()*4)];
+    const v=/[aeiou]/.exec(w)[0];$('fb').style.color='#2a9d5c';$('fb').innerHTML=`${ph} <span style="color:#1e3a8a">${letters(w)}</span> – short <span class="red">${v}</span>`;
+    sayQ([ph,w]);document.querySelectorAll('.opt').forEach(p=>p.onclick=null);$('prog').children[idx].classList.add('d');idx++;later(()=>next(false),2300);}
+  else{tries++;oops();b.classList.add('no');$('fb').style.color='#d63a5a';
+    if(mode==='listen'){$('fb').textContent='Listen carefully…';later(()=>sayQ(['Listen again.',w,w]),300);}
+    else{$('fb').textContent='Look at the middle sound…';later(()=>say('Read both words. Which one is it?'),300);}}}
+function finish(){const n=deck.length;$('end').querySelector('h1').textContent=mode==='listen'?'Super listening!':'Super reading!';
+  $('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));$('endtxt').textContent=`You did all ${n}. ${first} right first time!`;show('end');yay();say(mode==='listen'?'Great listening!':'Super reading!');
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+</script>
+</body>
+</html>

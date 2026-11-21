@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Spell it! Sound boxes · Short e · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#ffe7c2,#fff9ee);overflow:hidden;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#e0721a;text-shadow:0 3px 0 #fff}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:3vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:16px 34px;margin:9px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837;text-decoration:none}
+.back{position:absolute;left:18px;top:12px;font-size:clamp(16px,2.2vw,24px)}
+#prog{display:flex;gap:6px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+#scene{display:flex;align-items:center;gap:clamp(14px,3vw,34px);margin-top:.5vh}
+#pic{width:clamp(90px,15vh,150px);height:clamp(90px,15vh,150px);background:#fff;border:5px solid #1e2837;border-radius:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 rgba(0,0,0,.12);transition:transform .2s}
+#pic img{width:74%}
+#pic.ok{background:#dff5e6;border-color:#2a9d5c;transform:scale(1.08)}
+#hear{width:clamp(64px,10vh,88px);height:clamp(64px,10vh,88px);border-radius:50%;border:5px solid #1e2837;background:#ffd84d;font-size:clamp(28px,4.4vh,40px);cursor:pointer;padding:0;box-shadow:0 5px 0 rgba(0,0,0,.14)}
+#hear:active{transform:scale(.92)}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:2vh 0 0;text-align:center;padding:0 14px;min-height:1.3em}
+#boxes{display:flex;align-items:stretch;margin-top:2.5vh}
+.box{width:var(--bs);height:calc(var(--bs)*1.08);background:#fff;border:5px solid #1e2837;margin-left:-5px;display:flex;align-items:center;justify-content:center;font-size:calc(var(--bs)*.6);font-weight:600;line-height:1;position:relative;cursor:pointer}
+.box.f0{margin-left:0;border-radius:20px 0 0 20px}
+.box.l0{border-radius:0 20px 20px 0}
+.box.f0.l0{border-radius:20px}
+.gap{width:calc(var(--bs)*.35)}
+.box.hot{background:#fff3c4}
+.box.done{background:#f3fbf5}
+.box.pulse{animation:pop .45s}
+@keyframes pop{50%{transform:scale(1.12)}}
+.ctr{width:calc(var(--bs)*.42);height:calc(var(--bs)*.42);border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a6b,#e0521a);box-shadow:0 4px 0 rgba(0,0,0,.18);touch-action:none}
+.box .ctr{animation:pop .35s}
+.v{color:#e8231f}.k{color:#1d4fd8}
+#tray{display:flex;gap:clamp(8px,1.6vw,18px);margin-top:3.5vh;flex-wrap:wrap;justify-content:center;padding:12px 18px;min-height:calc(var(--bs)*.9);background:rgba(255,255,255,.5);border-radius:28px;max-width:94vw}
+#tray .ctr{width:clamp(48px,8vw,74px);height:clamp(48px,8vw,74px);cursor:pointer}
+.tile{min-width:clamp(54px,9vw,90px);height:clamp(60px,10vw,98px);padding:0 10px;background:#fff;border:4px solid #1e2837;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:clamp(34px,5.6vw,60px);font-weight:600;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.14);line-height:1;touch-action:none}
+.tile:active{background:#ffe27a}
+.tile.wig{animation:wig .45s}
+.tile.gone{display:none}
+@keyframes wig{0%,100%{translate:0}25%{translate:-12px}50%{translate:12px}75%{translate:-6px}}
+.ghost{position:fixed;z-index:50;pointer-events:none;transform:scale(1.1);box-shadow:0 14px 24px rgba(0,0,0,.25)}
+.fb{font-size:clamp(26px,4.5vw,48px);font-weight:600;height:1.4em;margin-top:2vh;color:#2a9d5c}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778}
+#demo{display:flex;margin:0 0 3vh;--bs:64px}
+@media (max-width:520px){#prog{gap:3px}#prog i{width:11px;height:11px}#top{padding:8px 10px}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <a class="mini back" href="index.html">⟵ Games</a>
+  <h1>Spell it!</h1>
+  <div id="demo"><div class="box f0"><div class="ctr"></div></div><div class="box"><div class="ctr"></div></div><div class="box l0"><div class="ctr"></div></div></div>
+  <div class="sub">Listen to the word. Put a counter in a box for each sound you hear. Then spell it with the letters!</div>
+  <button class="btn e" onclick="start('e')">Emerging<small>bed · pen · hen</small></button>
+  <button class="btn c" onclick="start('c')">Consolidating<small>nest · sled · dress</small></button>
+  <button class="btn x" onclick="start('x')">Extending<small>helmet · tennis · pencil</small></button>
+  <div class="foot">Pioneers Tutoring · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="scene"><button id="hear" title="Hear it again">🔊</button><div id="pic"><img id="pimg" alt=""></div></div>
+  <div id="prompt"></div>
+  <div id="boxes"></div>
+  <div id="tray"></div>
+  <div class="fb" id="fb"></div>
+</div>
+
+<div class="screen" id="end">
+  <h1>Super spelling!</h1>
+  <div class="big" id="endstars"></div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn b" onclick="start(mode)">Play again</button>
+  <button class="btn c" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// Sounds are split with '.', one box each ('sh', 'ck', 'll', 'er' are ONE sound, ONE tile). '|' marks a syllable break (Extending).
+// Emerging: short e CVC first. e before g (leg, egg) and before l (bell, shell, elf) drifts in Australian speech
+// ("laig", "aigg"), so those words come only at the end of a round.
+const SETS={
+ e:{main:['b.e.d','p.e.n','h.e.n','w.e.b','t.e.n','m.e.n','n.e.t'],late:['l.e.g','e.gg'],n:[6,2]},
+ c:{main:['n.e.s.t','t.e.n.t','s.l.e.d','d.r.e.ss','v.e.s.t'],late:['b.e.ll','sh.e.ll','e.l.f','ch.i.ck','f.r.o.g','d.r.u.m','c.r.a.b'],n:[5,3]},
+ x:{main:['h.e.l|m.e.t','t.e.n|n.i.s','p.e.n|c.i.l','l.e.m|o.n','m.e.l|o.n','s.e.v|e.n','e.l|e|ph.a.n.t','d.r.e.ss','sh.e.ll','s.l.e.d'],late:[],n:[8,0]}
+};
+const IMG={ten:'keycap10'};
+const VOW='aeiou'.split(''),CON='bdfglmnprst'.split(''),CONF={sh:'ch',ch:'sh',ck:'k',ll:'l',ss:'s',gg:'g',ph:'f',bb:'b',dd:'d',er:'a'};
+let mode='e',deck=[],idx=0,stars=0,first=0,tries=0,G=[],SYL=[],word='',fill=0,phase='',boxes=[];
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','Listen again.':'p-again',
+ 'Listen to the word.':'p-listen','Say each sound as you put a counter in a box.':'p-counters','Now spell it with the letters.':'p-spellit',
+ 'Say the sounds again, and try another letter.':'p-spellagain','You spelled it!':'p-spelled','Super spelling!':'p-endspell'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; return null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+const isV=g=>/^[aeiou]|^er$/.test(g);
+const span=g=>`<span class="${isV(g)?'v':'k'}">${g}</span>`;
+
+function start(m){mode=m;const S=SETS[m];deck=[...shuffle([...S.main]).slice(0,S.n[0]),...shuffle([...S.late]).slice(0,S.n[1])];
+  idx=0;stars=0;first=0;$('prog').innerHTML=deck.map(()=>'<i></i>').join('');$('stars').textContent='★ 0';show('game');next();}
+function quit(){if(curAudio)curAudio.pause();show('start');}
+function sizeBoxes(){const n=G.length+(SYL.length-1)*.35;const bs=Math.floor(Math.min(120,innerWidth*0.9/n,innerHeight*0.15));$('game').style.setProperty('--bs',bs+'px');}
+
+function next(){if(idx>=deck.length)return finish();tries=0;fill=0;phase='count';
+  SYL=deck[idx].split('|').map(s=>s.split('.'));G=SYL.flat();word=G.join('');
+  sizeBoxes();
+  const B=$('boxes');B.innerHTML='';boxes=[];
+  SYL.forEach((syl,si)=>{if(si)B.insertAdjacentHTML('beforeend','<div class="gap"></div>');
+    syl.forEach((g,j)=>{const b=document.createElement('div');b.className='box'+(j===0?' f0':'')+(j===syl.length-1?' l0':'');
+      b.onpointerdown=e=>{e.preventDefault();if(phase==='count')addCounter();};B.appendChild(b);boxes.push(b);});});
+  $('pimg').src='../img/'+(IMG[word]||word)+'.png';$('pic').classList.remove('ok');$('fb').textContent='';
+  const T=$('tray');T.innerHTML='';T.style.visibility='';
+  G.forEach(()=>{const c=document.createElement('div');c.className='ctr';c.onpointerdown=e=>{e.preventDefault();if(phase==='count')addCounter();};T.appendChild(c);});
+  $('prompt').textContent='Say each sound as you put a counter in a box.';
+  setTimeout(()=>sayQ(idx===0?['Listen to the word.',word,'Say each sound as you put a counter in a box.']:[word]),300);}
+$('hear').onclick=()=>say(word);
+
+// Step 1: one counter per sound (Elkonin boxes)
+function addCounter(){if(fill>=G.length)return;const T=$('tray');const c=T.querySelector('.ctr');if(c)c.remove();
+  const b=boxes[fill];b.innerHTML='<div class="ctr"></div>';b.classList.remove('pulse');b.offsetWidth;b.classList.add('pulse');tone(440+fill*90,.16);fill++;
+  if(fill>=G.length){phase='wait';setTimeout(step2,700);}}
+
+// Step 2: spell it with letter tiles (tap = next box, or drag to a box)
+function step2(){phase='spell';fill=0;boxes.forEach(b=>{b.innerHTML='';b.classList.remove('pulse');});
+  const extra=[shuffle(VOW.filter(v=>!G.includes(v)))[0],shuffle(CON.filter(c=>!word.includes(c)))[0]];
+  if(mode==='x')extra.push(shuffle(CON.filter(c=>!word.includes(c)&&!extra.includes(c)))[0]);
+  const dg=G.find(g=>CONF[g]&&!G.includes(CONF[g]));if(dg&&mode!=='e')extra.push(CONF[dg]);
+  const T=$('tray');T.innerHTML='';
+  shuffle([...G,...extra]).forEach(g=>{const t=document.createElement('div');t.className='tile';t.innerHTML=span(g);
+    dragOrTap(t,()=>place(t,g,boxes.findIndex(b=>!b.dataset.g)),bi=>place(t,g,bi));T.appendChild(t);});
+  $('prompt').textContent='Now spell it with the letters.';
+  if(idx<2)say('Now spell it with the letters.');else tone(700,.12);}
+
+function place(t,g,bi){if(phase!=='spell'||bi<0||bi==null)return;const b=boxes[bi];if(b.dataset.g)return;
+  if(G[bi]===g){b.dataset.g=g;b.innerHTML=span(g);b.classList.add('done');b.classList.remove('pulse');b.offsetWidth;b.classList.add('pulse');t.classList.add('gone');tone(520+bi*80,.14);
+    if(boxes.every(x=>x.dataset.g))done();}
+  else{
+    // never "wrong": the tile wiggles and stays in the tray, say the word again
+    tries++;oops();t.classList.remove('wig');t.offsetWidth;t.classList.add('wig');$('fb').textContent='';
+    if(tries===1){$('prompt').textContent='Say the sounds again, and try another letter.';sayQ(['Say the sounds again, and try another letter.',word]);}
+    else{$('prompt').textContent='Listen again.';const nb=boxes.findIndex(x=>!x.dataset.g);if(nb>=0){boxes[nb].classList.add('hot');setTimeout(()=>boxes[nb].classList.remove('hot'),1500);}sayQ([word]);}}}
+function done(){phase='done';if(tries===0){stars++;first++;}$('stars').textContent='★ '+stars;yay();$('pic').classList.add('ok');
+  document.querySelectorAll('#tray .tile').forEach(t=>t.classList.add('gone'));$('tray').style.visibility='hidden';
+  const ph=['You spelled it!','Yes!','You got it!','Super!'][Math.floor(Math.random()*4)];$('fb').textContent=ph;$('prompt').innerHTML=G.map(span).join('');
+  $('prompt').style.fontSize='clamp(34px,6vw,64px)';$('prompt').style.fontWeight='600';
+  sayQ([word,ph]);$('prog').children[idx].classList.add('d');idx++;
+  setTimeout(()=>{$('prompt').style.fontSize='';$('prompt').style.fontWeight='';boxes.forEach(b=>{delete b.dataset.g;b.classList.remove('done');});next();},2400);}
+
+function dragOrTap(el,onTap,onDrop){
+  el.onpointerdown=e=>{e.preventDefault();if(phase!=='spell')return;const sx=e.clientX,sy=e.clientY;let ghost=null,ox=0,oy=0,over=null;
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+    const boxAt=(x,y)=>{if(ghost)ghost.style.display='none';const h=document.elementFromPoint(x,y);if(ghost)ghost.style.display='';const b=h&&h.closest('.box');return b?boxes.indexOf(b):null;};
+    el.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>10){const r=el.getBoundingClientRect();ox=sx-r.left;oy=sy-r.top;ghost=el.cloneNode(true);ghost.classList.add('ghost');ghost.style.width=r.width+'px';ghost.style.height=r.height+'px';document.body.appendChild(ghost);el.style.visibility='hidden';}
+      if(ghost){ghost.style.left=ev.clientX-ox+'px';ghost.style.top=ev.clientY-oy+'px';const o=boxAt(ev.clientX,ev.clientY);boxes.forEach((b,k)=>b.classList.toggle('hot',k===o&&!b.dataset.g));over=o;}};
+    const end=ev=>{el.onpointermove=el.onpointerup=el.onpointercancel=null;boxes.forEach(b=>b.classList.remove('hot'));
+      if(ghost){ghost.remove();el.style.visibility='';if(ev.type==='pointerup'&&over!==null&&over>=0)onDrop(over);}else if(ev.type==='pointerup')onTap();};
+    el.onpointerup=end;el.onpointercancel=end;};}
+
+window.addEventListener('resize',()=>{if(G.length)sizeBoxes();});
+function finish(){const n=deck.length;$('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));$('endtxt').textContent=`You spelled ${n} words.`+(first?` ${first} right first time!`:'');show('end');yay();say('Super spelling!');
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+</script>
+</body>
+</html>

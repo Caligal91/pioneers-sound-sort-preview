@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Beat Your Best! · Short o · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#d6ecff,#fff9ee);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:4vh 0 1vh;color:#2f6fde;text-shadow:0 3px 0 #fff;text-align:center}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:2.4vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:14px 34px;margin:8px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837}
+#prog{font-weight:600;color:#2a9d5c}
+#namebox{display:flex;align-items:center;gap:10px;font-size:clamp(17px,2.2vw,22px);margin-bottom:1.4vh}
+#name{font-family:inherit;font-size:inherit;border:3px solid #1e2837;border-radius:14px;padding:6px 14px;width:min(260px,52vw);background:#fff;color:#1e2837}
+#main{display:flex;align-items:center;justify-content:center;gap:clamp(18px,4vw,60px);margin-top:clamp(10px,5vh,50px);width:100%;padding:0 12px;flex-wrap:wrap}
+#ring{position:relative;width:clamp(130px,19vw,220px);height:clamp(130px,19vw,220px);flex:none}
+#ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+#ring circle{fill:none;stroke-width:12}
+#ring .bg{stroke:#fff;stroke-width:14}
+#ring .fg{stroke:#2a9d5c;stroke-linecap:round;transition:stroke .4s}
+#ring .fg.late{stroke:#e08a00}
+#secs{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(40px,6vw,70px);font-weight:600;line-height:1}
+#secs small{font-size:.3em;font-weight:400;color:#556}
+#card{background:#fff;border:6px solid #1e2837;border-radius:30px;min-width:clamp(260px,46vw,560px);min-height:clamp(150px,26vh,240px);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.12);padding:10px 30px;position:relative}
+#wtext{font-size:clamp(60px,11vw,130px);font-weight:600;white-space:nowrap;letter-spacing:.03em}
+#wtext.long{font-size:clamp(46px,8vw,104px)}
+#wtext span{color:#1e3a8a}
+#wtext span.v{color:#e8231f}
+#wtext.ready{font-size:clamp(40px,6vw,72px);color:#2f6fde}
+#card.in{animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(40px);opacity:0}}
+#card.ok{animation:okp .22s}
+@keyframes okp{50%{transform:scale(1.05);background:#dff5e6}}
+#tut{display:flex;gap:clamp(16px,4vw,50px);margin-top:3.5vh}
+.tb{font-family:inherit;border:5px solid #1e2837;border-radius:28px;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.18);width:clamp(140px,22vw,230px);height:clamp(96px,15vh,140px);font-size:clamp(46px,7vw,76px);line-height:1;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tb small{font-size:clamp(14px,1.8vw,19px);margin-top:4px;opacity:.95}
+.tb:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.tb.yes{background:#2a9d5c}.tb.skip{background:#e08a00}.tb.go{background:#2f6fde;width:clamp(240px,40vw,380px)}
+#note{font-size:clamp(14px,1.9vw,19px);color:#556;margin-top:2.4vh;text-align:center;padding:0 12px}
+#undo{font-size:inherit;padding:2px 10px;margin-left:8px;border-width:2px}
+.big{color:#2a9d5c;font-size:clamp(80px,15vw,170px);margin:0;line-height:1;font-weight:600}
+.unit{font-size:clamp(18px,2.6vw,26px);margin-bottom:2vh}
+#cmp{font-size:clamp(22px,3.4vw,36px);font-weight:600;text-align:center;padding:0 16px;color:#1e2837}
+#cmp .nb{color:#e0a100}
+#praise{font-size:clamp(18px,2.6vw,26px);margin:1vh 0 1.5vh;text-align:center;padding:0 16px}
+#hist{display:flex;align-items:flex-end;gap:8px;height:80px;margin:4px 0 6px}
+#hist div{width:30px;background:#9cc3f5;border-radius:6px 6px 0 0;position:relative;font-size:13px;text-align:center}
+#hist div span{position:absolute;top:-18px;left:0;right:0}
+#hist div.now{background:#2a9d5c}
+#histlab{font-size:14px;color:#556}
+#practise{font-size:clamp(15px,2vw,20px);color:#556;margin:1vh 0;text-align:center;padding:0 16px}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778;text-align:center;padding:0 8px}
+.red{color:#e8231f}
+@media (max-height:640px){h1{margin-top:2vh}.btn{padding:9px 28px;margin:5px}#main{margin-top:6px}#tut{margin-top:2vh}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <h1>Beat Your Best!</h1>
+  <div class="sub">A one-minute reading race. Read as many words as you can – and try to beat <b>your own</b> best!</div>
+  <label id="namebox">Reader's name: <input id="name" placeholder="optional" autocomplete="off" maxlength="20"></label>
+  <button class="btn e" onclick="start('e')">Emerging<small id="be">dog · top · pot</small></button>
+  <button class="btn c" onclick="start('c')">Consolidating<small id="bc">stop · frog · clock</small></button>
+  <button class="btn x" onclick="start('x')">Extending<small id="bx">rocket · lollipop · laptop</small></button>
+  <a href="index.html" class="btn b" style="text-decoration:none;text-align:center">⟵ Games</a>
+  <div class="foot">Pioneers Tutoring · Each reader only races against themselves · Scores stay on this device</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog">✓ 0</div><div id="stars">★ 0</div></div>
+  <div id="main">
+    <div id="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="arc" cx="60" cy="60" r="52"/></svg><div id="secs"><span id="sn">60</span><small>seconds</small></div></div>
+    <div id="card"><div id="wtext"></div></div>
+  </div>
+  <div id="tut"></div>
+  <div id="note">Tutor: tap <b>✓</b> for each word read correctly · <b>↻</b> = skip, try it later <button class="mini" id="undo" onclick="undo()">↶ undo</button></div>
+</div>
+
+<div class="screen" id="end">
+  <h1 id="endh">Time's up!</h1>
+  <div class="big" id="score">0</div>
+  <div class="unit">words read correctly in one minute</div>
+  <div id="cmp"></div>
+  <div id="praise"></div>
+  <div id="hist"></div><div id="histlab"></div>
+  <div id="practise"></div>
+  <div><button class="btn b" onclick="start(mode)">Race again</button><button class="btn c" onclick="show('start');showBests()">Menu</button></div>
+</div>
+
+<script>
+const WORDS={
+ e:['dog','top','pot','box','jog','dot','fox','log','hot','mop','hop','pop','got','lot','not','job','rob','cop','rod','nod','rot','sob'],
+ c:['stop','drop','frog','clock','lock','sock','rock','shop','block','spot','plot','chop','flop','crop','stock','shock','pond','lost','cost','dock','moss','boss'],
+ x:['rocket','lollipop','hotdog','laptop','octopus','pocket','jogging','boxing','dolphin','bottle','shopping','stopping','dropping','spotted','locket','clocks','blocks']};
+const LEVEL={e:'Emerging',c:'Consolidating',x:'Extending'};
+const SECS=+(new URLSearchParams(location.search).get('secs'))||60;
+let mode='e',queue=[],qi=0,correct=0,skipped=[],log=[],t0=0,tick=null,state='idle',timers=[];
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const SENTS=[];
+const PHR={'Great reading!':'p-greatread','Super reading!':'p-reading','Ready, set, go!':'p-race-ready',"Time's up!":'p-race-timeup','A new best! Your brain is getting faster!':'p-race-best',
+ 'Great effort! Every time you practise, your brain gets faster.':'p-race-effort','Great reading! Next time, try to beat your score.':'p-race-first'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; const i=SENTS.indexOf(t); return i>=0?'s-'+i:null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const later=(f,ms)=>timers.push(setTimeout(f,ms));
+
+// scores: one record per reader name + level, kept on this device only (short o scores use their own 'race-o:' keys)
+const keyFor=m=>'race-o:'+(($('name').value||'').trim().toLowerCase()||'reader')+':'+m;
+function load(m){try{return JSON.parse(localStorage.getItem(keyFor(m)))||{best:null,hist:[]};}catch(e){return {best:null,hist:[]};}}
+function save(m,r){try{localStorage.setItem(keyFor(m),JSON.stringify(r));localStorage.setItem('race:lastname',$('name').value.trim());}catch(e){}}
+const SAMPLE={e:'dog · top · pot',c:'stop · frog · clock',x:'rocket · lollipop · laptop'};
+function showBests(){for(const m of 'ecx'){const r=load(m);$('b'+m).textContent=r.best==null?SAMPLE[m]:SAMPLE[m]+'  ·  best: '+r.best;}}
+try{$('name').value=localStorage.getItem('race:lastname')||'';}catch(e){}
+$('name').addEventListener('input',showBests);showBests();
+
+const C=2*Math.PI*52;$('arc').style.strokeDasharray=C;
+const letters=w=>[...w].map(ch=>`<span class="${/[aeiou]/.test(ch)?'v':''}">${ch}</span>`).join('');
+function setRing(left){$('arc').style.strokeDashoffset=C*(1-left/SECS);$('arc').classList.toggle('late',left<=10);$('sn').textContent=Math.ceil(left);}
+function start(m){mode=m;stop();queue=shuffle([...WORDS[m]]);qi=0;correct=0;skipped=[];log=[];state='ready';
+  $('prog').textContent='✓ 0';$('stars').textContent='★ 0';setRing(SECS);
+  $('wtext').className='ready';$('wtext').textContent=(($('name').value||'').trim()?$('name').value.trim()+', ready?':'Ready to race?');
+  $('tut').innerHTML='<button class="tb go" onclick="go()">Go!<small>tutor taps to start</small></button>';$('undo').style.visibility='hidden';
+  show('game');}
+function go(){if(state!=='ready')return;state='count';$('tut').innerHTML='';say('Ready, set, go!');
+  const words=['Ready…','Set…','Go!'];words.forEach((w,i)=>later(()=>{$('wtext').textContent=w;tone(i<2?520:880,.18);},i*620));
+  later(()=>{state='run';$('tut').innerHTML='<button class="tb yes" onclick="mark(true)">✓<small>read it</small></button><button class="tb skip" onclick="mark(false)">↻<small>try later</small></button>';
+    $('undo').style.visibility='visible';t0=performance.now();showWord();tick=setInterval(step,100);},1900);}
+function step(){const left=Math.max(0,SECS-(performance.now()-t0)/1000);setRing(left);if(left<=0)timeUp();}
+function cur(){if(qi>=queue.length){queue=queue.concat(shuffle([...WORDS[mode]]));}return queue[qi];}
+function showWord(){const w=cur(),t=$('wtext');t.className=w.length>6?'long':'';t.innerHTML=letters(w);const c=$('card');c.classList.remove('in');void c.offsetWidth;c.classList.add('in');}
+function mark(ok){if(state!=='run')return;const w=cur();log.push([w,ok,qi]);
+  if(ok){correct++;tone(880,.08);const c=$('card');c.classList.remove('ok');void c.offsetWidth;c.classList.add('ok');}
+  else{tone(330,.08,'triangle');if(!skipped.includes(w))skipped.push(w);queue.splice(Math.min(queue.length,qi+5),0,w);} // the skipped word comes back a little later
+  qi++;$('prog').textContent='✓ '+correct;$('stars').textContent='★ '+correct;showWord();}
+function undo(){if(state!=='run'||!log.length)return;const [w,ok,at]=log.pop();
+  if(ok)correct--;else{const j=queue.indexOf(w,at+1);if(j>at)queue.splice(j,1);if(!log.some(l=>l[0]===w&&!l[1]))skipped=skipped.filter(s=>s!==w);}
+  qi=at;$('prog').textContent='✓ '+correct;$('stars').textContent='★ '+correct;showWord();}
+function stop(){clearInterval(tick);tick=null;timers.forEach(clearTimeout);timers=[];}
+function quit(){stop();state='idle';show('start');showBests();}
+function timeUp(){stop();state='done';setRing(0);$('tut').innerHTML='';$('wtext').className='ready';$('wtext').textContent="Time's up!";
+  tone(880,.15);setTimeout(()=>tone(660,.15),150);setTimeout(()=>tone(990,.3),300);say("Time's up!");later(finish,1500);}
+function finish(){const r=load(mode),prev=r.best,wcpm=Math.round(correct*60/SECS);
+  r.hist=(r.hist||[]).concat(wcpm).slice(-8);let phrase;
+  const who=($('name').value||'').trim();
+  $('score').textContent=wcpm;
+  if(prev==null){$('endh').textContent='Great reading!';$('cmp').textContent='That’s '+(who?who+'’s':'your')+' first '+LEVEL[mode]+' score!';$('praise').textContent='Next time, try to beat it.';phrase='Great reading! Next time, try to beat your score.';r.best=wcpm;}
+  else if(wcpm>prev){$('endh').textContent='New best!';$('cmp').innerHTML=`Your best: ${prev} → today <span class="nb">${wcpm}</span>! New best!`;$('praise').textContent='Your brain is getting faster!';phrase='A new best! Your brain is getting faster!';r.best=wcpm;}
+  else if(wcpm===prev){$('endh').textContent='Equal best!';$('cmp').innerHTML=`You matched your best: <span class="nb">${wcpm}</span>!`;$('praise').textContent='Great effort – your brain is getting faster.';phrase='Great effort! Every time you practise, your brain gets faster.';}
+  else{$('endh').textContent='Great effort!';$('cmp').innerHTML=`Today: <span class="nb">${wcpm}</span> · your best: ${prev}`;$('praise').textContent='Great effort – every time you practise, your brain gets faster.';phrase='Great effort! Every time you practise, your brain gets faster.';}
+  save(mode,r);
+  const mx=Math.max(...r.hist,1);$('hist').innerHTML=r.hist.map((v,i)=>`<div class="${i===r.hist.length-1?'now':''}" style="height:${Math.max(6,Math.round(v/mx*70))}px"><span>${v}</span></div>`).join('');
+  $('histlab').textContent=r.hist.length>1?(who?who+'’s':'Your')+' races ('+LEVEL[mode]+')':'';
+  $('practise').textContent=skipped.length?'Words to practise: '+skipped.join(' · '):'';
+  show('end');yay();setTimeout(()=>say(phrase),400);
+  for(let i=0;i<(wcpm>(prev??-1)?90:50);i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+// laptop keyboard for the tutor: space / enter / right arrow = ✓, left arrow / S = ↻, backspace = undo
+document.addEventListener('keydown',e=>{if(e.target.id==='name')return;if(state==='ready'&&(e.key===' '||e.key==='Enter')){e.preventDefault();go();return;}
+  if(state!=='run')return;if([' ','Enter','ArrowRight'].includes(e.key)){e.preventDefault();mark(true);}else if(['ArrowLeft','s','S'].includes(e.key)){e.preventDefault();mark(false);}else if(e.key==='Backspace'){e.preventDefault();undo();}});
+</script>
+</body>
+</html>

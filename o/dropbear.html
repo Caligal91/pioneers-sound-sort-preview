@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Real or Drop Bear? · Short o · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#d9f0dc,#fff9ee);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#3f8a52;text-shadow:0 3px 0 #fff;text-align:center}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:3vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:16px 34px;margin:9px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px);position:relative;z-index:3}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837;text-decoration:none}
+#prog{display:flex;gap:6px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+/* gum tree branch across the top */
+#branch{position:absolute;left:-2%;right:-2%;top:clamp(58px,8vh,74px);height:18px;background:linear-gradient(#b08a66,#8a6544);border-radius:12px;transform:rotate(-1.2deg);z-index:1}
+#branch img{position:absolute;width:clamp(40px,5vw,60px);top:-16px}
+#bear{position:absolute;top:clamp(62px,8.4vh,80px);left:calc(50% - clamp(170px,25vw,290px));width:clamp(70px,9vw,110px);z-index:4;transform-origin:50% 0;transition:top .55s cubic-bezier(.5,1.6,.6,1)}
+#bear img.k{width:100%;transform:rotate(180deg);display:block}
+#bear img.z{position:absolute;width:45%;right:-38%;top:5%;animation:bob 2s ease-in-out infinite}
+#bear.sleep{animation:sway 3s ease-in-out infinite}
+#bear.drop{top:clamp(130px,25vh,240px)}
+#bear.drop img.z{display:none}
+@keyframes sway{0%,100%{rotate:-5deg}50%{rotate:5deg}}
+@keyframes bob{0%,100%{translate:0 0;opacity:.8}50%{translate:4px -8px;opacity:1}}
+#scene{display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,46px);margin-top:clamp(50px,13vh,130px);width:100%;padding:0 10px}
+#card{background:#fffdf6;border:7px solid #6f9c78;border-radius:30px;padding:clamp(14px,3vh,30px) clamp(24px,4vw,50px);min-width:clamp(220px,34vw,420px);text-align:center;box-shadow:0 8px 0 rgba(0,0,0,.12);position:relative}
+#card .leafA,#card .leafB{position:absolute;width:clamp(40px,5vw,58px);pointer-events:none}
+#card .leafA{left:-24px;top:-26px;transform:rotate(-30deg)}
+#card .leafB{right:-22px;bottom:-24px;transform:rotate(150deg)}
+#wtext{font-size:clamp(56px,10vw,120px);font-weight:600;letter-spacing:.04em;white-space:nowrap}
+#wtext.long{font-size:clamp(46px,8vw,100px)}
+#wtext span{display:inline-block;color:#1e3a8a}
+#wtext span.v{color:#e8231f}
+#wtext span.p{animation:pulse .5s ease-in-out}
+@keyframes pulse{50%{transform:scale(1.35) translateY(-6px)}}
+#card.wig{animation:wig .45s}
+@keyframes wig{0%,100%{translate:0}25%{translate:-14px}50%{translate:14px}75%{translate:-7px}}
+#hear{position:absolute;right:-22px;top:-22px;width:52px;height:52px;border-radius:50%;border:4px solid #1e2837;background:#ffd84d;font-size:24px;cursor:pointer;display:none}
+#pal{position:relative;display:flex;flex-direction:column;align-items:center}
+#pal .kl{width:clamp(80px,11vw,130px);display:block}
+#pal .bk{width:clamp(80px,11vw,130px);margin-top:-22px;display:block}
+#pal .bk.pop{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.2)}}
+#count{position:absolute;right:-8px;bottom:6px;background:#2a9d5c;color:#fff;border:3px solid #fff;border-radius:20px;min-width:40px;text-align:center;font-size:clamp(18px,2.4vw,24px);font-weight:600;padding:0 8px}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:4vh 0 1.6vh;text-align:center;padding:0 12px}
+#choices{display:flex;gap:clamp(12px,3vw,40px);flex-wrap:wrap;justify-content:center}
+.ch{font-family:inherit;font-size:clamp(22px,3.2vw,34px);border:5px solid #1e2837;border-radius:26px;padding:clamp(12px,2.6vh,26px) 28px;cursor:pointer;background:#fff;color:#1e2837;box-shadow:0 6px 0 rgba(0,0,0,.15);min-width:clamp(220px,28vw,320px);transition:transform .12s}
+.ch:active{transform:scale(.95)}
+.ch.real{background:#dff5e6;border-color:#2a9d5c}
+.ch.dear{background:#f3e3fa;border-color:#a64ac9}
+.ch small{display:block;font-size:.55em;opacity:.75}
+.ch.no{animation:wig .45s;opacity:.4}
+.ch.ok{transform:scale(1.08)}
+.fb{font-size:clamp(24px,4vw,44px);font-weight:600;height:1.4em;margin-top:1.6vh;color:#2a9d5c;text-align:center}
+.fly{position:fixed;z-index:9;font-weight:600;color:#1e3a8a;transition:all .8s cubic-bezier(.4,0,.6,1);pointer-events:none;white-space:nowrap}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778;text-align:center;padding:0 8px}
+.red{color:#e8231f}
+#start .bearlogo{display:flex;gap:10px;align-items:flex-end;margin-bottom:1vh}
+#start .bearlogo img{width:clamp(60px,8vw,90px)}
+@media (max-width:520px){#prog{gap:3px}#prog i{width:11px;height:11px}#top{padding:8px 10px}}
+@media (max-height:600px){h1{margin-top:2vh}.btn{padding:10px 28px;margin:6px}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <h1>Real or Drop Bear?</h1>
+  <div class="bearlogo"><img src="../img/koala.png" alt="" style="transform:rotate(180deg)"><img src="../img/basket.png" alt=""></div>
+  <div class="sub">Read the word on the gum tree. Is it a <b>real word</b>, or a cheeky made-up <b>Drop Bear word</b>?</div>
+  <button class="btn e" onclick="start('e')">Emerging<small>dog · zop · pot · vot</small></button>
+  <button class="btn c" onclick="start('c')">Consolidating<small>stop · blom · frog · drod</small></button>
+  <button class="btn x" onclick="start('x')">Extending<small>rocket · dopmit · laptop</small></button>
+  <a href="index.html" class="btn b" style="text-decoration:none;text-align:center">⟵ Games</a>
+  <div class="foot">Pioneers Tutoring · Practises reading made-up words, like the Year 1 Phonics Check · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="branch"><img src="../img/leaves.png" alt="" style="left:6%"><img src="../img/leaves.png" alt="" style="left:30%;transform:scaleX(-1)"><img src="../img/leaves.png" alt="" style="left:62%"><img src="../img/leaves.png" alt="" style="left:86%;transform:scaleX(-1)"></div>
+  <div id="bear" class="sleep"><img class="k" src="../img/koala.png" alt=""><img class="z" src="../img/zzz.png" alt=""></div>
+  <div id="scene">
+    <div id="card"><img class="leafA" src="../img/leaves.png" alt=""><img class="leafB" src="../img/leaves.png" alt=""><div id="wtext"></div><button id="hear" title="Hear it">🔊</button></div>
+    <div id="pal"><img class="kl" src="../img/koala.png" alt=""><img class="bk" id="bk" src="../img/basket.png" alt=""><div id="count">0</div></div>
+  </div>
+  <div id="prompt">Read it. Is it a real word?</div>
+  <div id="choices">
+    <button class="ch real" id="bReal" onclick="answer(true,this)">Real word ✓<small>into the basket</small></button>
+    <button class="ch dear" id="bDrop" onclick="answer(false,this)">Drop Bear word 🐨💤<small>made-up word</small></button>
+  </div>
+  <div class="fb" id="fb"></div>
+</div>
+
+<div class="screen" id="end">
+  <h1>Super reading!</h1>
+  <div class="big" id="endstars"></div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn b" onclick="start(mode)">Play again</button>
+  <button class="btn c" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// Real short-o words (all have Sophia clips) and made-up "Drop Bear" words (no audio: the child sounds them out).
+// Made-up words: not real Australian English words (no names, slang, brands or abbreviations), not rude.
+const REAL={
+ e:['dog','top','pot','box','jog','dot','fox','log','hot','mop','hop','pop','got','lot'],
+ c:['stop','drop','frog','clock','lock','sock','rock','shop','block','spot','plot','chop'],
+ x:['rocket','lollipop','hotdog','laptop','octopus','bottle','pocket','jogging','boxing','dolphin']};
+const FAKE={
+ e:['zop','vot','fod','yog','tob','mof','gox','vop'],
+ c:['blom','smop','drod','clob','brop','spog','trom','skod'],
+ x:['dopmit','fosnab','pobtim','folnet','soptib','vodlin','gobmat','rokdip']};
+const N=10;
+let mode='e',deck=[],idx=0,stars=0,first=0,tries=0,inBasket=0,bears=0,busy=false,timers=[];
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const SENTS=[];
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','You read it!':'p-read','Great reading!':'p-greatread','Listen again.':'p-again','Super reading!':'p-reading',
+ 'Real word, or drop bear word?':'p-db-q',"That's a real word!":'p-db-real','A cheeky drop bear word!':'p-db-drop','Have another look. Sound it out.':'p-db-look'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; const i=SENTS.indexOf(t); return i>=0?'s-'+i:null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+const boing=()=>{tone(300,.12,'square');setTimeout(()=>tone(200,.18,'square'),110);setTimeout(()=>tone(420,.2,'triangle'),260);};
+const later=(f,ms)=>timers.push(setTimeout(f,ms));
+
+function start(m){mode=m;timers.forEach(clearTimeout);timers=[];
+  const r=shuffle([...REAL[m]]).slice(0,N/2), f=shuffle([...FAKE[m]]).slice(0,N/2);
+  deck=shuffle([...r.map(w=>[w,true]),...f.map(w=>[w,false])]);
+  idx=0;stars=0;first=0;inBasket=0;bears=0;$('count').textContent='0';
+  $('prog').innerHTML=deck.map(()=>'<i></i>').join('');$('stars').textContent='★ 0';show('game');next();say('Real word, or drop bear word?');}
+function quit(){timers.forEach(clearTimeout);timers=[];show('start');}
+// every letter in its own span: vowels red, consonants dark blue
+const letters=w=>[...w].map(ch=>`<span class="${/[aeiou]/.test(ch)?'v':''}">${ch}</span>`).join('');
+function next(){if(idx>=deck.length)return finish();tries=0;busy=false;const [w]=deck[idx];
+  $('wtext').innerHTML=letters(w);$('wtext').classList.toggle('long',w.length>5);
+  $('hear').style.display='none';$('fb').textContent='';$('prompt').textContent='Read it. Is it a real word?';
+  document.querySelectorAll('.ch').forEach(b=>b.classList.remove('no','ok'));
+  const bear=$('bear');bear.classList.remove('drop');bear.classList.add('sleep');}
+// pulse the letters one by one so the tutor and child can sound the word out
+function pulse(){const s=[...$('wtext').children];s.forEach((el,i)=>later(()=>{el.classList.remove('p');void el.offsetWidth;el.classList.add('p');tone(520+i*60,.12,'triangle');},i*520));return s.length*520;}
+function answer(saysReal,btn){if(busy)return;const [w,real]=deck[idx];
+  if(saysReal===real){busy=true;if(tries===0){stars++;first++;}$('stars').textContent='★ '+stars;btn.classList.add('ok');$('prog').children[idx].classList.add('d');
+    if(real){yay();inBasket++;$('fb').style.color='#2a9d5c';$('fb').textContent='A real word: '+w+'!';$('prompt').textContent='Into the basket it goes!';sayQ(["That's a real word!",w]);flyToBasket();
+      $('hear').style.display='block';later(()=>{idx++;next();},2600);}
+    else{bears++;dropBear();$('fb').style.color='#a64ac9';$('fb').textContent='Drop Bear word! Sound it out: '+w.split('').join('-');$('prompt').textContent='A cheeky made-up word!';say('A cheeky drop bear word!');
+      const t=pulse();later(()=>{idx++;next();},Math.max(3000,t+1400));}}
+  else{tries++;oops();btn.classList.add('no');const c=$('card');c.classList.remove('wig');void c.offsetWidth;c.classList.add('wig');
+    $('fb').style.color='#d63a5a';$('fb').textContent='Have another look… sound it out.';$('prompt').textContent='Say each sound, then blend them together.';
+    say('Have another look. Sound it out.');later(pulse,1600);}}
+function flyToBasket(){const src=$('wtext').getBoundingClientRect(),dst=$('bk').getBoundingClientRect();const f=document.createElement('div');f.className='fly';f.innerHTML=$('wtext').innerHTML;
+  f.style.left=src.left+'px';f.style.top=src.top+'px';f.style.fontSize=getComputedStyle($('wtext')).fontSize;document.body.appendChild(f);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{f.style.left=(dst.left+dst.width/2-20)+'px';f.style.top=(dst.top+dst.height/3)+'px';f.style.fontSize='16px';f.style.opacity='.2';}));
+  later(()=>{f.remove();$('count').textContent=inBasket;const b=$('bk');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');tone(990,.12);},850);}
+function dropBear(){const b=$('bear');b.classList.remove('sleep');b.classList.add('drop');later(boing,350);later(()=>{b.classList.remove('drop');b.classList.add('sleep');},2300);}
+$('hear').onclick=e=>{e.stopPropagation();const [w,real]=deck[idx]||[];if(real)say(w);};
+function finish(){const n=deck.length;$('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));
+  $('endtxt').textContent=`${inBasket} real words in the basket and ${bears} drop bears spotted! ${first} right first time.`;show('end');yay();say('Super reading!');
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+</script>
+</body>
+</html>

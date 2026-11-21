@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Magic Word Chain · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#d9efc0,#fbf6e4 70%,#efe0bf);overflow:hidden;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#2f7d3a;text-shadow:0 3px 0 #fff}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:3vh;text-align:center;padding:0 20px;max-width:900px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:16px 34px;margin:9px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:270px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn small{display:block;font-size:.6em;opacity:.92}
+.e{background:#2a9d5c}.c{background:#e08a00}.x{background:#a64ac9}.b{background:#2f6fde}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+.mini{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer;color:#1e2837;text-decoration:none}
+.back{position:absolute;left:18px;top:12px;font-size:clamp(16px,2.2vw,24px)}
+#prog{display:flex;gap:6px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:1vh 0 0;text-align:center;padding:0 14px;display:flex;align-items:center;gap:14px;min-height:56px}
+#hear{width:56px;height:56px;border-radius:50%;border:4px solid #1e2837;background:#ffd84d;font-size:26px;cursor:pointer;flex-shrink:0;padding:0}
+#hear:active{transform:scale(.92)}
+#board{margin-top:2.5vh;background:rgba(255,255,255,.55);border-radius:36px;padding:clamp(14px,2.4vw,26px) clamp(16px,3vw,40px);display:flex;gap:clamp(8px,1.4vw,16px);box-shadow:0 6px 0 rgba(47,125,58,.18)}
+.tile{width:var(--ts);height:calc(var(--ts)*1.12);background:#fff;border:5px solid #1e2837;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:calc(var(--ts)*.7);font-weight:600;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.14);transition:transform .15s,background .2s;line-height:1;touch-action:none}
+.tile.sel{transform:translateY(-12px);background:#ffe27a;border-color:#e0a100}
+.tile.hint{animation:glow 1.2s infinite;border-color:#e0a100}
+@keyframes glow{50%{box-shadow:0 0 0 8px #ffd84d,0 7px 0 rgba(0,0,0,.14)}}
+.tile.good{background:#dff5e6;border-color:#2a9d5c;animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.15)}}
+.tile.wig{animation:wig .45s}
+.tile.drop{background:#fff3c4}
+@keyframes wig{0%,100%{translate:0}25%{translate:-12px}50%{translate:12px}75%{translate:-6px}}
+.v{color:#e8231f}.k{color:#1d4fd8}
+#bank{display:flex;gap:clamp(8px,1.6vw,18px);margin-top:3.5vh;flex-wrap:wrap;justify-content:center;padding:0 10px}
+.let{width:clamp(46px,13vw,92px);height:clamp(46px,13vw,92px);border-radius:50%;background:#fff;border:4px solid #1e2837;display:flex;align-items:center;justify-content:center;font-size:clamp(30px,8vw,58px);font-weight:600;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.14);line-height:1;touch-action:none}
+.let:active,.let.sel{background:#ffe27a;border-color:#e0a100}
+.ghost{position:fixed;z-index:50;pointer-events:none;transform:scale(1.1);box-shadow:0 14px 24px rgba(0,0,0,.25)}
+#trail{position:absolute;left:0;right:0;bottom:2vh;display:flex;justify-content:center;align-items:flex-end;gap:clamp(2px,1vw,12px);padding:0 10px}
+.fp{width:clamp(36px,8.5vw,92px);display:flex;flex-direction:column;align-items:center;font-size:clamp(11px,1.7vw,19px);color:#5b4a2e}
+.fp .spot{width:clamp(30px,6vw,64px);height:clamp(30px,6vw,64px);border-radius:50%;border:3px dashed rgba(91,74,46,.35);display:flex;align-items:center;justify-content:center}
+.fp:nth-child(even) .spot{margin-bottom:14px}
+.fp img{width:120%;transform:rotate(90deg);animation:pop .5s;filter:sepia(.9) saturate(2.5) hue-rotate(-10deg) brightness(.75)}
+.fp .spot.full{border-color:transparent}
+.fp.startw .spot{border:0}
+#koala{width:clamp(40px,8vw,84px)}
+.fb{font-size:clamp(26px,4.5vw,48px);font-weight:600;height:1.4em;margin-top:2vh;color:#2a9d5c}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778}
+#endchain{font-size:clamp(18px,2.8vw,30px);text-align:center;padding:0 20px;margin-bottom:2vh;max-width:1000px}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <a class="mini back" href="index.html">⟵ Games</a>
+  <h1>Magic Word Chain</h1>
+  <img src="img/pawprints.png" alt="" style="width:clamp(70px,10vw,110px);transform:rotate(90deg);filter:sepia(.9) saturate(2.5) hue-rotate(-10deg) brightness(.75)">
+  <div class="sub">Follow the tracks through the bush! Listen to the new word, then change just one letter to make it.</div>
+  <button class="btn e" onclick="start('e')">Emerging<small>cat → mat → map</small></button>
+  <button class="btn c" onclick="start('c')">Consolidating<small>flag → flap → clap</small></button>
+  <button class="btn x" onclick="start('x')">Extending<small>black → block → clock</small></button>
+  <div class="foot">Pioneers Tutoring · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button class="mini" onclick="quit()">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="prompt"><button id="hear" title="Hear it again">🔊</button><span id="ptext"></span></div>
+  <div id="board"></div>
+  <div id="bank"></div>
+  <div class="fb" id="fb"></div>
+  <div id="trail"></div>
+</div>
+
+<div class="screen" id="end">
+  <h1>What a magic chain!</h1>
+  <div class="big" id="endstars"></div>
+  <div id="endchain"></div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn b" onclick="start(mode)">Play again</button>
+  <button class="btn c" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// Each chain: 9 words, each one letter different from the last (8 steps). Vowel changes are mixed in so the child listens to the middle sound.
+const CHAINS={
+ e:['cat mat map mop top tap tip sip sap','bat bag big pig pin pit pat sat sad','hat hit sit sat rat rag bag bug rug'],
+ c:['flag flap clap clip slip slap slam slim swim','hand sand send bend band bank tank sank sunk','jump bump lump lamp camp ramp damp dump pump'],
+ x:['black block clock click chick thick trick track truck','hand band bend send sent tent test best rest','trap trip drip drop crop chop shop ship chip']
+};
+const VOW='aeiou'.split(''), CON='bcdfghklmnprst'.split('');
+let mode='e',chain=[],step=0,stars=0,first=0,tries=0,cur='',target='',pos=0,selTile=null,selLet=null,busy=false;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let voice=null;function pick(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick;}
+function tts(t,r){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=r||.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','Listen again.':'p-again',
+ 'Change one letter to make':'p-change','Tap the letter you want to change.':'p-tapletter','Nearly! Listen again.':'p-nearly','Magic!':'p-magic','What a magic word chain!':'p-endchain'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; return null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+const col=l=>VOW.includes(l)?'v':'k';
+
+function start(m){mode=m;chain=CHAINS[m][Math.floor(Math.random()*CHAINS[m].length)].split(' ');step=0;stars=0;first=0;
+  $('prog').innerHTML=chain.slice(1).map(()=>'<i></i>').join('');$('stars').textContent='★ 0';
+  $('trail').innerHTML=`<div class="fp startw"><div class="spot"><img src="img/pawprints.png" alt=""></div>${chain[0]}</div>`+chain.slice(1).map(()=>'<div class="fp"><div class="spot"></div>&nbsp;</div>').join('')+'<img id="koala" src="img/koala.png" alt="">';
+  cur=chain[0];drawWord();show('game');newStep();}
+function quit(){if(curAudio)curAudio.pause();show('start');}
+function sizeWord(){const ts=Math.min(130,Math.floor(Math.min(innerWidth*0.84/(cur.length*1.12),innerHeight*0.16)));$('board').style.setProperty('--ts',ts+'px');}
+function drawWord(){const B=$('board');sizeWord();
+  B.innerHTML='';[...cur].forEach((l,i)=>{const t=document.createElement('div');t.className='tile';t.innerHTML=`<span class="${col(l)}">${l}</span>`;t.onpointerdown=e=>{e.preventDefault();tapTile(i);};B.appendChild(t);});}
+function tiles(){return [...$('board').children];}
+
+function newStep(){if(step>=chain.length-1)return finish();
+  tries=0;busy=false;selTile=selLet=null;target=chain[step+1];
+  pos=[...cur].findIndex((l,i)=>l!==target[i]);const right=target[pos],old=cur[pos];
+  const pool=VOW.includes(right)?[...shuffle(VOW.filter(v=>v!==right&&v!==old)).slice(0,2),...shuffle(CON.filter(c=>c!==old)).slice(0,3)]
+                                 :[...shuffle(VOW.filter(v=>v!==old)).slice(0,1),...shuffle(CON.filter(c=>c!==right&&c!==old)).slice(0,4)];
+  const K=$('bank');K.innerHTML='';
+  shuffle([right,...pool]).forEach(l=>{const b=document.createElement('div');b.className='let';b.innerHTML=`<span class="${col(l)}">${l}</span>`;dragOrTap(b,()=>tapLet(b,l),t=>{if(t)apply(t,l);});K.appendChild(b);});
+  tiles().forEach(t=>t.classList.remove('sel','hint','good'));
+  $('ptext').textContent='Change one letter to make the new word.';$('fb').textContent='';
+  sayQ(['Change one letter to make',target]);}
+$('hear').onclick=()=>sayQ(['Change one letter to make',target]);
+
+function tapTile(i){if(busy)return;
+  if(selLet){const l=selLet.l;apply(i,l);return;}
+  tiles().forEach((t,k)=>t.classList.toggle('sel',k===i&&selTile!==i));selTile=selTile===i?null:i;tone(520,.08);}
+function tapLet(b,l){if(busy)return;
+  if(selTile!==null){apply(selTile,l);return;}
+  document.querySelectorAll('.let').forEach(x=>x.classList.toggle('sel',x===b));selLet={b,l};tone(620,.08);
+  $('ptext').textContent='Now tap the letter you want to change.';say('Tap the letter you want to change.');}
+
+function apply(i,l){if(busy)return;busy=true;const ts=tiles(),t=ts[i];
+  ts.forEach(x=>x.classList.remove('sel'));document.querySelectorAll('.let').forEach(x=>x.classList.remove('sel'));selTile=null;selLet=null;
+  const made=cur.slice(0,i)+l+cur.slice(i+1);
+  t.innerHTML=`<span class="${col(l)}">${l}</span>`;
+  if(made===target){
+    cur=made;if(tries===0){stars++;first++;}$('stars').textContent='★ '+stars;ts.forEach(x=>x.classList.remove('hint'));t.classList.add('good');yay();
+    const ph=['Magic!','Yes!','You got it!','Super!'][Math.floor(Math.random()*4)];$('fb').textContent=ph;$('ptext').textContent='';sayQ([target,ph]);
+    const fp=$('trail').children[step+1];fp.innerHTML=`<div class="spot full"><img src="img/pawprints.png" alt=""></div>${target}`;
+    $('prog').children[step].classList.add('d');step++;
+    setTimeout(()=>{t.classList.remove('good');newStep();},2100);}
+  else{
+    // never "wrong": show what they made, wiggle, put the old letter back, listen again
+    tries++;oops();t.classList.add('wig');$('fb').textContent='';
+    setTimeout(()=>{t.classList.remove('wig');t.innerHTML=`<span class="${col(cur[i])}">${cur[i]}</span>`;busy=false;
+      if(tries>=2)ts[pos].classList.add('hint');},700);
+    $('ptext').textContent=tries>=2?'Listen again. Try the glowing letter.':'Nearly! Listen again.';
+    sayQ(['Nearly! Listen again.',target]);}}
+
+// tap, or drag a letter onto a tile (pointer events: touch + mouse)
+function dragOrTap(el,onTap,onDrop){
+  el.onpointerdown=e=>{e.preventDefault();if(busy)return;const sx=e.clientX,sy=e.clientY;let ghost=null,ox=0,oy=0,over=null;
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+    const tileAt=(x,y)=>{if(ghost)ghost.style.display='none';const h=document.elementFromPoint(x,y);if(ghost)ghost.style.display='';const t=h&&h.closest('.tile');return t?tiles().indexOf(t):null;};
+    el.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>10){const r=el.getBoundingClientRect();ox=sx-r.left;oy=sy-r.top;ghost=el.cloneNode(true);ghost.classList.add('ghost');ghost.style.width=r.width+'px';ghost.style.height=r.height+'px';document.body.appendChild(ghost);}
+      if(ghost){ghost.style.left=ev.clientX-ox+'px';ghost.style.top=ev.clientY-oy+'px';const o=tileAt(ev.clientX,ev.clientY);tiles().forEach((t,k)=>t.classList.toggle('drop',k===o));over=o;}};
+    const end=ev=>{el.onpointermove=el.onpointerup=el.onpointercancel=null;tiles().forEach(t=>t.classList.remove('drop'));
+      if(ghost){ghost.remove();if(ev.type==='pointerup'&&over!==null)onDrop(over);}else if(ev.type==='pointerup')onTap();};
+    el.onpointerup=end;el.onpointercancel=end;};}
+
+window.addEventListener('resize',sizeWord);
+function finish(){const n=chain.length-1;$('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));
+  $('endchain').innerHTML=chain.map(w=>[...w].map(l=>`<span class="${col(l)}">${l}</span>`).join('')).join(' → ');
+  $('endtxt').textContent=`You made ${n} new words.`+(first?` ${first} right first time!`:'');show('end');yay();say('What a magic word chain!');
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+</script>
+</body>
+</html>

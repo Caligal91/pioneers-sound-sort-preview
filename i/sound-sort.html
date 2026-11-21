@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Sound Sort · Short i · Pioneers Tutoring</title>
+<style>
+@font-face{font-family:Fredoka;src:url(../Fredoka.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:Fredoka,'Comic Sans MS',sans-serif;color:#1e2837;background:linear-gradient(#bfe6ff,#fff7e0);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center}
+.screen.on{display:flex}
+h1{font-size:clamp(34px,6vw,64px);margin:5vh 0 1vh;color:#2f6fde;text-shadow:0 3px 0 #fff}
+.sub{font-size:clamp(18px,2.6vw,26px);margin-bottom:4vh;text-align:center;padding:0 20px}
+.btn{font-family:inherit;font-size:clamp(20px,3vw,30px);border:0;border-radius:22px;padding:18px 34px;margin:10px;color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.18);min-width:260px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.easy{background:#2a9d5c}.hard{background:#e08a00}.again{background:#2f6fde}
+.btn small{display:block;font-size:.6em;opacity:.9}
+#top{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-size:clamp(18px,2.6vw,28px)}
+#stars{color:#e0a100;font-weight:600}
+#home{background:#fff;border:3px solid #1e2837;border-radius:14px;padding:4px 14px;font-family:inherit;font-size:inherit;cursor:pointer}
+#prompt{font-size:clamp(18px,2.6vw,28px);margin:2px 0 8px;text-align:center}
+#stage{flex:1;width:100%;position:relative}
+#card{position:absolute;left:50%;top:6%;transform:translateX(-50%);width:clamp(140px,22vw,210px);height:clamp(160px,25vw,240px);background:#fff;border:5px solid #1e2837;border-radius:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;box-shadow:0 8px 0 rgba(0,0,0,.15);z-index:5}
+#card img{width:70%;pointer-events:none}
+#card .w{font-size:clamp(24px,3.4vw,38px);margin-top:4px;pointer-events:none}
+#card .hint{position:absolute;top:-34px;font-size:16px;color:#556;white-space:nowrap;pointer-events:none}
+#card.drag{cursor:grabbing;box-shadow:0 18px 30px rgba(0,0,0,.25)}
+#card.wiggle{animation:wig .45s}
+@keyframes wig{0%,100%{margin-left:0}20%{margin-left:-14px}40%{margin-left:14px}60%{margin-left:-9px}80%{margin-left:9px}}
+#buckets{position:absolute;left:0;right:0;bottom:2vh;display:flex;justify-content:center;gap:clamp(8px,1.6vw,22px);padding:0 10px}
+.bucket{flex:1;max-width:220px;min-height:clamp(150px,24vh,230px);border-radius:26px 26px 40px 40px;border:5px solid #1e2837;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:10px;transition:transform .15s}
+.bucket .L{font-size:clamp(46px,7vw,84px);line-height:1;font-weight:600;color:#e8231f}
+.bucket img{width:clamp(40px,6vw,70px)}
+.bucket .k{font-size:clamp(14px,2vw,22px);color:#445}
+.bucket.hot{transform:scale(1.07)}
+.bucket.good{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.15)}}
+.fb{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-size:clamp(28px,5vw,54px);font-weight:600;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;text-shadow:0 3px 0 #fff}
+.fb.on{opacity:1}
+#prog{display:flex;gap:6px;justify-content:center;margin-bottom:4px}
+#prog i{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1e2837}
+#prog i.d{background:#2a9d5c}
+.big{color:#e0a100;font-size:clamp(60px,12vw,140px);margin:2vh 0}
+.conf{position:absolute;width:12px;height:18px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.foot{position:absolute;bottom:8px;font-size:12px;color:#778}
+@media (max-width:520px){#prog{gap:3px}#prog i{width:11px;height:11px}#top{padding:8px 10px}}
+</style>
+</head>
+<body>
+<div class="screen on" id="start">
+  <h1>Sound Sort</h1>
+  <div class="sub">Listen to the word. Drag the picture into the right bucket!</div>
+  <button class="btn easy" onclick="start('easy')">Short i – or not?<small>Emerging · 2 buckets</small></button>
+  <button class="btn hard" onclick="start('hard')">a · e · i · o · u<small>Consolidating · 5 buckets</small></button>
+  <button class="btn" style="background:#a64ac9" onclick="start('blends')">Super challenge<small>Extending · gift · milk · brick</small></button>
+  <a href="index.html" class="btn" style="background:#777;text-decoration:none;text-align:center">All games</a>
+  <a href="match.html" class="btn" style="background:#2f6fde;text-decoration:none;text-align:center">Read &amp; Match game</a>
+  <div class="foot">Pioneers Tutoring · Pictures: Microsoft Fluent Emoji (MIT)</div>
+</div>
+
+<div class="screen" id="game">
+  <div id="top"><button id="home" onclick="show('start')">⟵ Menu</button><div id="prog"></div><div id="stars">★ 0</div></div>
+  <div id="prompt">Tap the picture to hear it. Then drag it into a bucket.</div>
+  <div id="stage">
+    <div id="card"><div class="hint">tap to hear 🔊</div><img id="cimg" alt=""><div class="w" id="cword"></div></div>
+    <div class="fb" id="fb"></div>
+    <div id="buckets"></div>
+  </div>
+</div>
+
+<div class="screen" id="end">
+  <h1>Fantastic sorting!</h1>
+  <div class="big" id="endstars">★★★</div>
+  <div class="sub" id="endtxt"></div>
+  <button class="btn again" onclick="start(mode)">Play again</button>
+  <button class="btn hard" onclick="show('start')">Menu</button>
+</div>
+
+<script>
+// Short i focus. Every i word has a picture that clearly shows it (swim = the swimming picture, six = the 6 picture).
+// "Not short i" pictures include short e words (pen, hen, bed, ten): e/i is the classic mix-up for Australian children.
+// Not used on purpose: tin (the picture is a tomato tin), lid, hit, tip (no picture that matches the word).
+const WORDS={a:['cat','bat','rat','cap','bag','map','van','crab','pan','hat'],
+ e:['bed','pen','egg','web','hen','ten','men','net'],i:['pig','pin','six','bin','fish','kiss','ring','wing'],o:['dog','fox','box','sock','log'],u:['sun','bus','bug','duck','cup','mug']};
+const BLENDS={a:['crab','flag','clap','hand','plant'],e:['nest','sled','bell','shell','tent','dress','vest','elf'],i:['gift','milk','chick','brick','ship','pink'],o:['frog','lock','clock','sock','box'],u:['drum','truck','mug','duck','bus']};
+const IMG={ten:'keycap10',swim:'swimming'};const pic=w=>'../img/'+(IMG[w]||w)+'.png';
+const KEY={a:'cat',e:'bed',i:'pig',o:'dog',u:'sun'};
+const vowelOf=w=>Object.keys(WORDS).find(v=>WORDS[v].includes(w)||BLENDS[v].includes(w));
+let mode='easy', deck=[], idx=0, stars=0, firstTry=0, tries=0;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+// speech (Australian voice if the device has one)
+let voice=null;function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en-AU/i.test(v.lang))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function tts(t,rate){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.lang=voice?voice.lang:'en-AU';u.rate=rate||0.85;speechSynthesis.speak(u);}
+
+// Australian ElevenLabs voice (Sophia) clips, with the device voice as a fallback
+const SENTS=[];
+const PHR={'Great listening!':'p-great','Yes!':'p-yes','You got it!':'p-gotit','Super!':'p-super','You read it!':'p-read','Great reading!':'p-greatread','Listen again.':'p-again','Fantastic sorting!':'p-sorting','Super reading!':'p-reading','short a.':'p-shorta','short e.':'p-e','short i.':'p-i','short o.':'p-o','short u.':'p-u'};
+const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))return 'w-'+t; const i=SENTS.indexOf(t); return i>=0?'s-'+i:null;};
+let curAudio=null;
+function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
+  const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('../voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+  go(0);}
+function say(t){ sayQ([t]); }
+
+// tiny sound effects
+let ac=null;function tone(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+const yay=()=>{tone(660,.15);setTimeout(()=>tone(880,.2),120);setTimeout(()=>tone(1320,.25),240);};
+const oops=()=>tone(180,.25,'triangle');
+
+function start(m){mode=m;stars=0;idx=0;firstTry=0;
+  const e=shuffle([...WORDS.i]).slice(0,5);
+  // Emerging: 5 short i + 5 others, at least 2 of them short e
+  const rest=[...shuffle([...WORDS.e]).slice(0,2),...shuffle(['a','o','u'].flatMap(v=>WORDS[v])).slice(0,3)];
+  // Consolidating and Extending: 3 short i + 2 of each other vowel (Extending: no word twice, e.g. box/sock/duck/bus are in two lists)
+  const ext=()=>{const out=shuffle([...BLENDS.i]).slice(0,3);['a','e','o','u'].forEach(v=>out.push(...shuffle(BLENDS[v].filter(w=>!out.includes(w))).slice(0,2)));return out;};
+  deck=shuffle(m==='easy'?[...e,...rest]:m==='hard'?[...shuffle([...WORDS.i]).slice(0,3),...['a','e','o','u'].flatMap(v=>shuffle([...WORDS[v]]).slice(0,2))]:ext());
+  const B=$('buckets');B.innerHTML='';
+  const list=m==='easy'?[['i','short i',KEY.i],['x','not short i','']]:['a','e','i','o','u'].map(v=>[v,'',KEY[v]]);
+  list.forEach(([v,label,k])=>{const d=document.createElement('div');d.className='bucket';d.dataset.v=v;
+    d.innerHTML=v==='x'?`<div class="L" style="color:#1e2837">✗</div><div class="k">${label}</div>`:`<div class="L">${v}</div>${k?`<img src="../img/${k}.png" alt="">`:''}<div class="k">${label||k}</div>`;
+    d.onclick=()=>{ if(v!=='x') say(k||'i'); };B.appendChild(d);});
+  $('prog').innerHTML=deck.map(()=>'<i></i>').join('');
+  $('stars').textContent='★ 0';show('game');next();}
+function next(){if(idx>=deck.length)return finish();tries=0;const w=deck[idx];const c=$('card');
+  $('cimg').src=pic(w);$('cword').textContent=mode==='easy'?w:'?';c.style.left='50%';c.style.top='6%';c.style.transform='translateX(-50%)';c.style.display='flex';
+  setTimeout(()=>say(w),250);}
+function drop(v){const w=deck[idx],right=vowelOf(w);const ok=mode==='easy'?((right==='i')===(v==='i')):v===right;
+  const fb=$('fb');const b=[...document.querySelectorAll('.bucket')].find(x=>x.dataset.v===v);
+  if(ok){tries===0&&(stars++,firstTry++);$('stars').textContent='★ '+stars;yay();b.classList.add('good');setTimeout(()=>b.classList.remove('good'),500);
+    const ph=['Great listening!','Yes!','You got it!','Super!'][Math.floor(Math.random()*4)];fb.textContent=ph+' '+w;fb.style.color='#2a9d5c';fb.classList.add('on');
+    sayQ([ph,w,'short '+right+'.']);
+    $('prog').children[idx].classList.add('d');$('card').style.display='none';idx++;setTimeout(()=>{fb.classList.remove('on');next();},1300);}
+  else{tries++;oops();const c=$('card');c.classList.add('wiggle');setTimeout(()=>c.classList.remove('wiggle'),450);reset();
+    fb.textContent='Listen again…';fb.style.color='#d63a5a';fb.classList.add('on');setTimeout(()=>fb.classList.remove('on'),1100);
+    sayQ(['Listen again.',w,w]);}}
+function reset(){const c=$('card');c.style.left='50%';c.style.top='6%';c.style.transform='translateX(-50%)';}
+function finish(){const n=deck.length;$('endstars').textContent='★'.repeat(Math.max(1,Math.round(stars/n*5)));
+  $('endtxt').textContent=`You sorted all ${n} pictures. ${firstTry} right first time!`;show('end');yay();sayQ(['Fantastic sorting!']);
+  for(let i=0;i<60;i++){const s=document.createElement('div');s.className='conf';s.style.left=Math.random()*100+'vw';s.style.background=['#e8231f','#2f6fde','#2a9d5c','#e0a100','#a64ac9'][i%5];s.style.animationDuration=(1.5+Math.random()*2)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),4000);}}
+// drag with pointer events (mouse, touch, pen); tap = hear the word
+(function(){const c=$('card');let sx,sy,ox,oy,moved=false,drag=false;
+ c.addEventListener('pointerdown',e=>{drag=true;moved=false;c.setPointerCapture(e.pointerId);const r=c.getBoundingClientRect(),p=$('stage').getBoundingClientRect();sx=e.clientX;sy=e.clientY;ox=r.left-p.left;oy=r.top-p.top;c.style.transform='none';c.style.left=ox+'px';c.style.top=oy+'px';c.classList.add('drag');});
+ c.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;c.style.left=ox+dx+'px';c.style.top=oy+dy+'px';
+   document.querySelectorAll('.bucket').forEach(b=>{const r=b.getBoundingClientRect();b.classList.toggle('hot',e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top-40&&e.clientY<r.bottom);});});
+ c.addEventListener('pointerup',e=>{if(!drag)return;drag=false;c.classList.remove('drag');const hot=document.querySelector('.bucket.hot');document.querySelectorAll('.bucket').forEach(b=>b.classList.remove('hot'));
+   if(!moved){reset();say(deck[idx]);return;} if(hot)drop(hot.dataset.v);else reset();});
+})();
+</script>
+</body>
+</html>
