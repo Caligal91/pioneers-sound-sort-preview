@@ -95,7 +95,7 @@ const clipFor=t=>{t=t.trim(); if(PHR[t])return PHR[t]; if(/^[a-z]+$/.test(t))ret
 let curAudio=null;
 function sayQ(list){ if(curAudio){curAudio.pause();curAudio=null;} if('speechSynthesis' in window)speechSynthesis.cancel();
   const go=k=>{ if(k>=list.length)return; const t=list[k], c=clipFor(t);
-    if(!c){ tts(t); return go(k+1);} const a=new Audio('voice/'+c+'.mp3'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
+    if(!c){ tts(t); return go(k+1);} const a=new Audio('voice/'+c+'.mp3?v=1128'); curAudio=a; a.onended=()=>setTimeout(()=>go(k+1),250); a.onerror=()=>{tts(t);}; a.play().catch(()=>tts(t)); };
   go(0);}
 function say(t){ sayQ([t]); }
 
